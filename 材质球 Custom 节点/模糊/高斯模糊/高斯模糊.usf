@@ -1,0 +1,43 @@
+// 高斯模糊
+
+// // 纹理
+// Texture2DSampler Texture
+// // 纹素
+// float2 TexelSize;
+// // UV
+// float UV;
+// // 模糊半径
+// int Radius;
+
+struct FunctionStruct
+{
+    //计算一维高斯模糊
+    float Cal_1DGaussian(float x)
+    {
+        return exp(-0.5f * pow(3.141 * x, 2));
+    }
+};
+
+FunctionStruct FS;
+
+//用于存储累积的颜色
+float3 PixelSum = float3(0, 0, 0);
+//累积权重值
+float WeightSum = 0;
+
+for (int x = -Radius; x <= Radius; x++)
+{
+    for (int y = -Radius; y <= Radius; y++)
+    {
+        float2 UVOffset = float2(UV.x + x * TexelSize.x, UV.y + y * TexelSize.y);
+        // 获取偏移的颜色
+        float3 PixelColor = Texture2DSample(Texture, Material.Texture2D_0Sampler, UVOffset);
+        // 获取对应的权重值
+        float weight = FS.Cal_1DGaussian(x / Radius) * FS.Cal_1DGaussian(y / Radius);
+        //累加颜色
+        PixelSum += PixelColor*weight;
+        //累加权重值
+        WeightSum += weight;
+    }
+}
+return float4(PixelSum / WeightSum, 1);

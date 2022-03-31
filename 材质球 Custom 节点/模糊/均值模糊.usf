@@ -1,0 +1,21 @@
+// 均值模糊
+
+// // 纹理
+// Texture2DSampler Texture
+// // 纹素
+// float2 TexelSize;
+// // UV
+// float UV;
+// // 模糊半径
+// int Radius;
+
+float3 Color = float3(0, 0, 0);
+for (int x = -Radius; x <= Radius; x++)
+{
+    for (int y = -Radius; y <= Radius; y++)
+    {
+        float2 UVOffset = float2(UV.x + x * TexelSize.x, UV.y + y * TexelSize.y);
+        Color += Texture2DSample(Texture, Material.Texture2D_0Sampler, UVOffset);
+    }
+}
+return float4(Color / (Radius * Radius * 4), 1);

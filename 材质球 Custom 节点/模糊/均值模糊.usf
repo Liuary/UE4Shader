@@ -1,21 +1,15 @@
-// 均值模糊
-
-// // 纹理
-// Texture2DSampler Texture
-// // 纹素
-// float2 TexelSize;
-// // UV
-// float UV;
-// // 模糊半径
-// int Radius;
-
-float3 Color = float3(0, 0, 0);
-for (int x = -Radius; x <= Radius; x++)
-{
-    for (int y = -Radius; y <= Radius; y++)
+// // 纹理坐标，纹素尺寸，2D 纹理采样，模糊半径
+// float3 fun(float2 UV, float2 TexelSize, Texture2DSampler Texture, float Radius)
+// {
+    float3 Color = float3(0.f, 0.f, 0.f);
+    for (int x = -Radius; x <= Radius; x++)
     {
-        float2 UVOffset = float2(UV.x + x * TexelSize.x, UV.y + y * TexelSize.y);
-        Color += Texture2DSample(Texture, Material.Texture2D_0Sampler, UVOffset);
+        for (int y = -Radius; y <= Radius; y++)
+        {
+            // 纹理坐标偏移
+            float2 UVOffset = float2(UV.x + x * TexelSize.x, UV.y + y * TexelSize.y);
+            Color += Texture2DSample(Texture, Material.Texture2D_0Sampler, UVOffset);
+        }
     }
-}
-return float4(Color / (Radius * Radius * 4), 1);
+    return float3(Color / pow(Radius * 2 + 1, 2));
+// }

@@ -34,8 +34,7 @@ struct FunctionStruct
             // 获取偏移的颜色
             float3 PixelColor = Texture2DSample(Texture, Material.Texture2D_0Sampler, UVOffset);
             // 获取对应的权重值
-            // float weight = FS.Cal_1DGaussian(x / Radius) * FS.Cal_1DGaussian(y / Radius);
-            float weight = pow (FS.Cal_1DGaussian(x / Radius) , 1);
+            float weight = FS.Cal_1DGaussian(x / Radius) * FS.Cal_1DGaussian(y / Radius);
             //累加颜色
             PixelSum += PixelColor*weight;
             //累加权重值

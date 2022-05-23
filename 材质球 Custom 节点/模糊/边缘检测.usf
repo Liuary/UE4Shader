@@ -1,0 +1,36 @@
+// Sobel 算子卷积边缘检测
+
+// 参考链接：https://blog.csdn.net/qq_28820675/article/details/113916963
+// // 纹理坐标，纹素尺寸，2D 纹理采样，模糊半径
+// float fun(float2 UV, float2 TexelSize, Texture2DSampler Texture)
+// {
+
+    float GX[3][3] = {
+        {-1,-2,-1},
+        {0, 0, 0},
+        {1, 2, 1}
+    };
+
+    float GY[3][3] = {
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1}
+    };
+
+    float Ex = 0.f;
+    float Ey = 0.f;
+
+    for (int x = -1; x <= 1; x++)
+    {
+        for (int y = -1; y <= 1; y++)
+        {
+            // UV 偏移
+            float2 UVOffset = float2(UV.x + x * TexelSize.x, UV.y + y * TexelSize.y);
+            // 获取偏移的颜色
+            float3 PixelColor = Texture2DSample(Texture, Material.Texture2D_0Sampler, UVOffset);
+            Ex += PixelColor * GX[x + 1][y + 1];
+            Ey += PixelColor * GY[x + 1][y + 1];
+        }
+    }
+    return saturate(1 - (abs(Ex) + abs(Ey)));
+// }
